@@ -54,5 +54,6 @@ void imprimir_di(diccionario_i dic);
 void imprimir_dd(diccionario_d dic);
 int liberar_mem(bd_INEGI *Datos);
 int ini_bd(bd_INEGI *Datos);
-
+//Encuentra el primer registro de data que tiene el cve_entidad pasado a la funcion
+long int encontrar_registro_cve_entidad(long int cve_entidad, bd_INEGI* Data);
 #endif

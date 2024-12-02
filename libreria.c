@@ -449,3 +449,34 @@ int liberar_mem(bd_INEGI *Datos)
 	}
 	return 0;
 }
+//Encuentra el primer registro de data que tiene el cve_entidad pasado a la funcion
+long int encontrar_registro_cve_entidad(long int cve_entidad, bd_INEGI* Data)
+{
+	//set i (registry we will check) to the middle point by diving the total number of registries into 2
+	long int i = ((Data->nr)/2);
+	//we set bottom at 0 since its from where we first calculate the middle and the same with top being nr the max point
+	long int bottom = 0,top = Data->nr;
+	//we do everything until the current value is equal to the target value
+	while(Data->cve_entidad[i] != cve_entidad)
+	{
+		if(cve_entidad<Data->cve_entidad[i])
+		{
+			//if our target value is under our current value we set the maximum point to the current value
+			top = i;
+		}
+		else if(cve_entidad>Data->cve_entidad[i])
+		{
+			//if our target value is over our current value we set the minimum point to the current value
+			bottom = i;
+		}
+		//we set a new anchor point between the minimum and maximum point 
+		i = (bottom+top)/2
+	}
+	//we find the first item containing the target value by checking if the previous one is not the same
+	while(Data->cve_entidad[i] == cve_entidad)
+		i--;
+	//we add one to the value since the last value was equal but the current is not
+	i++;
+	//we return the iterator which is the registry number of the first coincidence
+	return i;
+}
