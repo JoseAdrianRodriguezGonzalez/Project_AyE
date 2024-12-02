@@ -470,7 +470,7 @@ long int encontrar_registro_cve_entidad(long int cve_entidad, bd_INEGI* Data)
 			bottom = i;
 		}
 		//we set a new anchor point between the minimum and maximum point 
-		i = (bottom+top)/2
+		i = (bottom+top)/2;
 	}
 	//we find the first item containing the target value by checking if the previous one is not the same
 	while(Data->cve_entidad[i] == cve_entidad)
@@ -479,4 +479,31 @@ long int encontrar_registro_cve_entidad(long int cve_entidad, bd_INEGI* Data)
 	i++;
 	//we return the iterator which is the registry number of the first coincidence
 	return i;
+}
+long int cantidad_total_defunciones(long int reg,bd_INEGI Datos){
+    long int municipios_defunciones=0;
+    //municipios_defunciones=(long int*)malloc(sizeof(Datos.cve_municipio)*sizeof(long int));
+    while (!Datos.cve_municipio[reg])
+        reg++;
+    //Tiene dos de diferencia
+    long int municipio_mayor=0;
+    long int reg_mun=0;
+    int id_mayor=0;
+    int id=Datos.cve_municipio[reg];
+    while (id!=996){
+        municipios_defunciones=0;
+        while (Datos.id_indicador[reg]==1002000030){
+            municipios_defunciones+=Datos.valor[reg];
+            reg++;
+        }
+        if(municipio_mayor<municipios_defunciones){
+            id_mayor=id;
+            reg_mun= Datos.desc_municipio.id[Datos.cve_entidad[reg]][Datos.cve_municipio[reg]];
+            municipio_mayor=municipios_defunciones;
+        }
+        reg++;
+        id=Datos.cve_municipio[reg];
+    }
+    printf("Def: %ld\nMayor municipio (%s)   (%d)",municipio_mayor,Datos.desc_municipio.palabra[reg_mun],id_mayor);
+    return municipios_defunciones;
 }
