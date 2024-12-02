@@ -480,34 +480,127 @@ long int encontrar_registro_cve_entidad(long int cve_entidad, bd_INEGI* Data)
 	//we return the iterator which is the registry number of the first coincidence
 	return i;
 }
-long int cantidad_total_defunciones(long int reg,bd_INEGI Datos){
+long int cantidad_total_defunciones(long int reg,bd_INEGI* Datos){
     long int municipios_defunciones=0;
 	
     //municipios_defunciones=(long int*)malloc(sizeof(Datos.cve_municipio)*sizeof(long int));
-    while (!Datos.cve_municipio[reg])
+    while (!Datos->cve_municipio[reg])
         reg++;
 
     //Tiene dos de diferencia
     long int municipio_mayor=0;
     long int reg_mun=0;
     int id_mayor=0;
-    int id=Datos.cve_municipio[reg];
+    int id=Datos->cve_municipio[reg];
     while (id!=996){
         municipios_defunciones=0;
-        while (Datos.id_indicador[reg]==1002000030){
-            municipios_defunciones+=Datos.valor[reg];
+        while (Datos->id_indicador[reg]==1002000030){
+            municipios_defunciones+=Datos->valor[reg];
             reg++;
         }
         if(municipio_mayor<municipios_defunciones){
             id_mayor=id;
-            reg_mun= Datos.desc_municipio.id[Datos.cve_entidad[reg]][Datos.cve_municipio[reg]];
+            reg_mun= Datos->desc_municipio.id[Datos->cve_entidad[reg]][Datos->cve_municipio[reg]];
             municipio_mayor=municipios_defunciones;
         }
         reg++;
-        id=Datos.cve_municipio[reg];
+        id=Datos->cve_municipio[reg];
 	
     }
 
-    printf("\nDefunciones: %ld\nMayor municipio (%s)   (%d)",municipio_mayor,Datos.desc_municipio.palabra[reg_mun],id_mayor);
+    printf("\nDefunciones: %ld\nMayor municipio (%s)   (%d)",municipio_mayor,Datos->desc_municipio.palabra[reg_mun],id_mayor);
     return municipios_defunciones;
+}
+char accentType(char* Accented)
+{
+	switch(*Accented)
+	{
+		case -127:
+			return 'A';
+			break;
+		case -119:
+			return 'E';
+			break;
+		case -115:
+			return 'I';
+			break;
+		case -109:
+			return 'O';
+			break;
+		case -102:
+			return 'U';
+			break;
+		case -95:
+			return 'a';
+			break;
+		case -87:
+			return 'e';
+			break;
+		case -83:
+			return 'i';
+			break;
+		case -77:
+			return 'o';
+			break;
+		case -70:
+			return 'u';
+			break;
+		default:
+			return '\0';
+	}
+}
+void removeAccents(char* String)
+{
+	char *p = String;
+	for ( ; *p; ++p)
+	{
+		if(*p == -61)
+		{
+			strcpy(p,p+1);
+			*p = accentType(p);
+			p--;
+		}
+	}
+
+
+}
+void stringToLower(char* String)
+{
+	char *p = String;
+	for ( ; *p; ++p) *p = tolower(*p);
+}
+void normalizeString(char* String)
+{
+
+	removeAccents(String);
+
+	stringToLower(String);
+
+}
+long int cve_entidad_por_nombre(char* estado, bd_INEGI* Data)
+{
+	normalizeString(estado);
+	long int i  = 0;
+	char * buffer = malloc(sizeof(char)*100); 
+	strcpy(buffer,Data->desc_entidad.palabra[i]);
+	normalizeString(buffer);
+	while(strcmp(estado,buffer))
+	{
+		i++;
+		if(i>=Data->desc_entidad.np)
+			return -1;
+		strcpy(buffer,Data->desc_entidad.palabra[i]);
+		normalizeString(buffer);
+	}
+	strcpy(buffer,Data->desc_entidad.palabra[i]);
+	char* lastString = NULL;
+	i = 0;
+	while(strcmp(buffer,Data->desc_entidad.palabra[Data->cve_entidad[i]]))
+	{
+		while(lastString==Data->desc_entidad.palabra[Data->cve_entidad[i]])
+			i++;
+		lastString=Data->desc_entidad.palabra[Data->cve_entidad[i]];
+	}
+	free(buffer);	
+	return Data->cve_entidad[i];
 }

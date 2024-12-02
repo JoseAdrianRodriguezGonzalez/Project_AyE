@@ -54,8 +54,11 @@ void imprimir_di(diccionario_i dic);
 void imprimir_dd(diccionario_d dic);
 int liberar_mem(bd_INEGI *Datos);
 int ini_bd(bd_INEGI *Datos);
+//encuentra el numero de estado a partir de un string
+long int cve_entidad_por_nombre(char* estado, bd_INEGI* Data);
 //Encuentra el primer registro de data que tiene el cve_entidad pasado a la funcion
 long int encontrar_registro_cve_entidad(long int cve_entidad, bd_INEGI* Data);
 //Encuentra el municipio con la mayor cantidad de muertes
-long int cantidad_total_defunciones(long int reg,bd_INEGI Datos);
+long int cantidad_total_defunciones(long int reg,bd_INEGI* Datos);
+
 #endif

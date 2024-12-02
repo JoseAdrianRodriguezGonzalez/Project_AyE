@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     
     long int registro_mun =encontrar_registro_cve_entidad(9, &Datos);  
     //desc_entidad es un diccionario_r, se puede buscar como un buscar_i(diccionario_r dic, char *palabra)
-    cantidad_total_defunciones(registro_mun,Datos);
+    cantidad_total_defunciones(registro_mun,&Datos);
     
 	liberar_mem(&Datos);
 	//liberar_bd(Datos);
