@@ -28,11 +28,11 @@ int main(int argc, char *argv[])
 	printf("ID indicador: %s (%ld)\n", buscar(Datos.indicador, Datos.id_indicador[reg]), Datos.id_indicador[reg]);
 	printf("Año: %d\n", Datos.anio[reg]);
 	printf("Valor : %ld\n", Datos.valor[reg]);
-
-    long int registro_mun =encontrar_registro_cve_entidad(11, &Datos);  
+    
+    long int registro_mun =encontrar_registro_cve_entidad(9, &Datos);  
     //desc_entidad es un diccionario_r, se puede buscar como un buscar_i(diccionario_r dic, char *palabra)
     cantidad_total_defunciones(registro_mun,Datos);
-
+    
 	liberar_mem(&Datos);
 	//liberar_bd(Datos);
 	//printf("%ld\n", Datos.nr);

@@ -482,9 +482,11 @@ long int encontrar_registro_cve_entidad(long int cve_entidad, bd_INEGI* Data)
 }
 long int cantidad_total_defunciones(long int reg,bd_INEGI Datos){
     long int municipios_defunciones=0;
+	
     //municipios_defunciones=(long int*)malloc(sizeof(Datos.cve_municipio)*sizeof(long int));
     while (!Datos.cve_municipio[reg])
         reg++;
+
     //Tiene dos de diferencia
     long int municipio_mayor=0;
     long int reg_mun=0;
@@ -503,7 +505,9 @@ long int cantidad_total_defunciones(long int reg,bd_INEGI Datos){
         }
         reg++;
         id=Datos.cve_municipio[reg];
+	
     }
-    printf("Def: %ld\nMayor municipio (%s)   (%d)",municipio_mayor,Datos.desc_municipio.palabra[reg_mun],id_mayor);
+
+    printf("\nDefunciones: %ld\nMayor municipio (%s)   (%d)",municipio_mayor,Datos.desc_municipio.palabra[reg_mun],id_mayor);
     return municipios_defunciones;
 }
