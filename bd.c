@@ -28,10 +28,19 @@ int main(int argc, char *argv[])
 	printf("ID indicador: %s (%ld)\n", buscar(Datos.indicador, Datos.id_indicador[reg]), Datos.id_indicador[reg]);
 	printf("Año: %d\n", Datos.anio[reg]);
 	printf("Valor : %ld\n", Datos.valor[reg]);
-    
-    long int registro_mun =encontrar_registro_cve_entidad(9, &Datos);  
-    //desc_entidad es un diccionario_r, se puede buscar como un buscar_i(diccionario_r dic, char *palabra)
-    cantidad_total_defunciones(registro_mun,&Datos);
+    char estado[MAX_STR];
+	printf("Escribe un estado: ");
+	fflush(stdin); 
+	fgets(estado, sizeof(estado), stdin);
+	estado[strcspn(estado, "\n")] = '\0';
+	long int cve=cve_entidad_por_nombre(estado,  &Datos);
+	if(!(cve==-1)){
+		long int registro_mun =encontrar_registro_cve_entidad(cve, &Datos);  
+    	//desc_entidad es un diccionario_r, se puede buscar como un buscar_i(diccionario_r dic, char *palabra)
+		cantidad_total_defunciones(registro_mun,&Datos);
+	}
+	else
+		printf("Municipio no encontrado o con acento");
     
 	liberar_mem(&Datos);
 	//liberar_bd(Datos);
